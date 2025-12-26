@@ -1,0 +1,683 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🎉2026跨年🎉</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <!-- 粒子效果库 -->
+    <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
+    <!-- 引入艺术字体 -->
+    <link href="https://fonts.googleapis.com/css2?family=Ma+Shan+Zheng&family=Noto+Sans+SC:wght@300;400;500;700;900&family=ZCOOL+KuaiLe&display=swap" rel="stylesheet">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700;900&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Noto Sans SC', sans-serif;
+        }
+        
+        body {
+            overflow: hidden;
+            background: linear-gradient(135deg, #0c1445, #1a1060, #2d0f70);
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+        }
+        
+        #particles-js {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            z-index: 1;
+        }
+        
+        #fireworks {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            z-index: 2;
+            pointer-events: none;
+        }
+        
+        /* 粒子倒计时画布样式 */
+        #countdownCanvas {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            z-index: 4;
+            display: none; /* 默认隐藏，倒计时最后3秒显示 */
+        }
+        
+        .container {
+            position: relative;
+            z-index: 3;
+            text-align: center;
+            padding: 2rem;
+            border-radius: 20px;
+            max-width: 800px;
+            width: 90%;
+        }
+        
+        .countdown-box {
+            margin: 2rem 0;
+            padding: 1.5rem;
+            border-radius: 15px;
+            background: rgba(0, 0, 0, 0.2);
+        }
+        
+        .countdown-time {
+            display: flex;
+            justify-content: center;
+            gap: 1.5rem;
+            flex-wrap: wrap;
+            margin-top: 1rem;
+        }
+        
+        .time-item {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 1rem 1.5rem;
+            border-radius: 10px;
+            min-width: 80px;
+        }
+        
+        .time-number {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: #64ffda;
+        }
+        
+        .time-text {
+            font-size: 0.9rem;
+            opacity: 0.8;
+            margin-top: 0.5rem;
+        }
+        
+        .particle-countdown {
+            font-size: 5rem;
+            font-weight: 900;
+            color: #ff6b81;
+            text-shadow: 0 0 20px rgba(255, 107, 129, 0.5);
+            margin: 2rem 0;
+            display: none;
+        }
+        
+        .blessing-text {
+            font-size: 2.5rem;
+            font-weight: 400;
+            color: #fff9c4;
+            margin: 2rem 0;
+            display: none;
+            line-height: 1.8;
+            padding: 2rem;
+            border-radius: 20px;
+            font-family: 'Ma Shan Zheng', cursive;
+            animation: 
+                blessingGlow 3s ease-in-out infinite alternate,
+                blessingFloat 6s ease-in-out infinite;
+        }
+        
+        /* 祝福语发光动画 */
+        @keyframes blessingGlow {
+            0% {
+                text-shadow: 
+                    0 0 10px rgba(255, 249, 196, 0.9),
+                    0 0 20px rgba(255, 249, 196, 0.7),
+                    0 0 30px rgba(255, 249, 196, 0.5);
+            }
+            100% {
+                text-shadow: 
+                    0 0 15px rgba(255, 249, 196, 1),
+                    0 0 25px rgba(255, 249, 196, 0.8),
+                    0 0 35px rgba(255, 249, 196, 0.6),
+                    0 0 45px rgba(255, 249, 196, 0.4);
+            }
+        }
+        
+        /* 祝福语漂浮动画 */
+        @keyframes blessingFloat {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-8px); }
+            100% { transform: translateY(0px); }
+        }
+        
+       .subtitle {
+            font-size: 3rem;
+            font-weight: 800;
+            opacity: 0.95;
+            color: #4fc3f7;
+            text-shadow: 
+                0 0 10px rgba(79, 195, 247, 0.8),
+                0 0 20px rgba(79, 195, 247, 0.6),
+                0 0 40px rgba(79, 195, 247, 0.4),
+                0 0 80px rgba(79, 195, 247, 0.2);
+            margin-bottom: 1rem;
+            background: linear-gradient(90deg, #4fc3f7, #64ffda, #4fc3f7);
+            background-size: 200% 100%;
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            animation: 
+                subtitlePulse 3s ease-in-out infinite alternate,
+                subtitleGradient 5s linear infinite;
+            font-family: 'ZCOOL KuaiLe', cursive;
+        }
+
+        @keyframes subtitlePulse {
+            0% {
+                opacity: 0.85;
+                transform: scale(1);
+            }
+            100% {
+                opacity: 1;
+                transform: scale(1.02);
+            }
+        }
+
+        @keyframes subtitleGradient {
+            0% {
+                background-position: 0% 50%;
+            }
+            100% {
+                background-position: 200% 50%;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .subtitle {
+                font-size: 2rem;
+                animation: 
+                    subtitlePulse 3s ease-in-out infinite alternate,
+                    subtitleGradient 5s linear infinite;
+            }
+            
+            .time-number {
+                font-size: 1.8rem;
+            }
+
+            .blessing-text {
+                font-size: 1.8rem;
+                padding: 1.5rem;
+                line-height: 1.6;
+            }
+            
+            .year {
+                font-size: 2.5rem;
+            }
+            
+            .particle-countdown {
+                font-size: 4rem;
+            }
+        }
+        
+        .year {
+            font-size: 3rem;
+            font-weight: 900;
+            color: #4fc3f7;
+            text-shadow: 0 0 20px rgba(79, 195, 247, 0.6);
+            margin: 1rem 0;
+        }
+    </style>
+</head>
+<body>
+    <div id="particles-js"></div>
+    <canvas id="fireworks"></canvas>
+    <canvas id="countdownCanvas"></canvas>
+    
+    <div class="container">
+        <div class="subtitle">距离2026年跨年还有</div>
+        <div class="countdown-box">
+            <div class="countdown-time">
+                <div class="time-item">
+                    <div class="time-number" id="days">00</div>
+                    <div class="time-text">天</div>
+                </div>
+                <div class="time-item">
+                    <div class="time-number" id="hours">00</div>
+                    <div class="time-text">时</div>
+                </div>
+                <div class="time-item">
+                    <div class="time-number" id="minutes">00</div>
+                    <div class="time-text">分</div>
+                </div>
+                <div class="time-item">
+                    <div class="time-number" id="seconds">00</div>
+                    <div class="time-text">秒</div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="year"></div>
+        
+        <div class="particle-countdown" id="particleCountdown"></div>
+        
+        <div class="blessing-text" id="blessingText">
+            2026新年快乐！<br>
+            愿新年，胜旧年，<br>
+            岁岁常欢愉，年年皆胜意！<br>
+            愿所有美好与温柔如约而至，<br>
+            万事顺遂，平安喜乐！<br>
+        </div>
+    </div>
+
+    <script>
+        // 初始化粒子背景
+        particlesJS('particles-js', {
+            "particles": {
+                "number": {
+                    "value": 150,
+                    "density": {
+                        "enable": true,
+                        "value_area": 800
+                    }
+                },
+                "color": {
+                    "value": ["#4fc3f7", "#64ffda", "#ff6b81", "#fff9c4", "#9c27b0"]
+                },
+                "shape": {
+                    "type": "circle",
+                    "stroke": {
+                        "width": 0,
+                        "color": "#000000"
+                    }
+                },
+                "opacity": {
+                    "value": 0.7,
+                    "random": true,
+                    "anim": {
+                        "enable": true,
+                        "speed": 0.5,
+                        "opacity_min": 0.1,
+                        "sync": false
+                    }
+                },
+                "size": {
+                    "value": 3,
+                    "random": true,
+                    "anim": {
+                        "enable": true,
+                        "speed": 2,
+                        "size_min": 0.1,
+                        "sync": false
+                    }
+                },
+                "line_linked": {
+                    "enable": true,
+                    "distance": 150,
+                    "color": "#ffffff",
+                    "opacity": 0.2,
+                    "width": 1
+                },
+                "move": {
+                    "enable": true,
+                    "speed": 1,
+                    "direction": "none",
+                    "random": true,
+                    "straight": false,
+                    "out_mode": "out",
+                    "bounce": false
+                }
+            },
+            "interactivity": {
+                "detect_on": "canvas",
+                "events": {
+                    "onhover": {
+                        "enable": true,
+                        "mode": "grab"
+                    },
+                    "onclick": {
+                        "enable": true,
+                        "mode": "push"
+                    },
+                    "resize": true
+                },
+                "modes": {
+                    "grab": {
+                        "distance": 140,
+                        "line_linked": {
+                            "opacity": 0.5
+                        }
+                    },
+                    "push": {
+                        "particles_nb": 4
+                    }
+                }
+            },
+            "retina_detect": true
+        });
+
+        // 目标时间：2026年1月1日 00:00:00
+        const targetDate = new Date('2025-12-26T17:15:00').getTime();
+        let countdownInterval = null; // 倒计时定时器
+        let isCountdownEnded = false; // 标记倒计时是否结束
+        // 粒子倒计时相关变量
+        let particleCountdownTimer = null;
+        let particleCount = 3;
+        let particles = [];
+        const canvas = document.getElementById('countdownCanvas');
+        const ctx = canvas.getContext('2d');
+        let cw = canvas.width = window.innerWidth;
+        let ch = canvas.height = window.innerHeight;
+        const halfCW = cw / 2;
+        const halfCH = ch / 2;
+
+        // 粒子倒计时配置项
+        const particleOption = {
+            numDensity: 8000, // 粒子密度，越大粒子越多越密
+            particleSize: 2,  // 粒子大小
+            color: "#64ffda", // 粒子颜色 
+            speed: 5,         // 粒子重组速度
+            endText: ""       // 倒计时结束显示内容，空则消失
+        };
+
+        
+        // 粒子类
+        class Particle {
+            constructor(x, y) {
+                this.x = Math.random() * cw;
+                this.y = Math.random() * ch;
+                this.targetX = x;
+                this.targetY = y;
+                this.size = particleOption.particleSize;
+                this.color = particleOption.color;
+            }
+            update() {
+                this.x += (this.targetX - this.x) / particleOption.speed;
+                this.y += (this.targetY - this.y) / particleOption.speed;
+                this.draw();
+            }
+            draw() {
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.fillStyle = this.color;
+                ctx.fill();
+            }
+        }
+
+        // 创建文字粒子
+        function createTextParticle(txt) {
+            particles = [];
+            ctx.clearRect(0, 0, cw, ch);
+            // 适配不同屏幕的字体大小
+            const fontSize = Math.min(cw, ch) * 0.3;
+            ctx.font = `bold ${fontSize}px Arial`;
+            ctx.textAlign = "center";
+            ctx.textBaseline = "middle";
+            ctx.fillStyle = particleOption.color;
+            ctx.fillText(txt, halfCW, halfCH);
+            
+            // 提取文字像素生成粒子
+            const pixelData = ctx.getImageData(0, 0, cw, ch).data;
+            for (let y = 0; y < ch; y += 6) {
+                for (let x = 0; x < cw; x += 6) {
+                    const index = (y * cw + x) * 4;
+                    const alpha = pixelData[index + 3];
+                    if (alpha > 0 && particles.length < particleOption.numDensity) {
+                        particles.push(new Particle(x, y));
+                    }
+                }
+            }
+        }
+
+        // 渲染粒子动画
+        function renderParticle() {
+            ctx.clearRect(0, 0, cw, ch);
+            particles.forEach(p => p.update());
+            requestAnimationFrame(renderParticle);
+        }
+
+        // 粒子倒计时逻辑
+        function particleCountDown() {
+            // 先校验真实时间，避免偏差
+            const currentDistance = targetDate - new Date().getTime();
+            if (currentDistance <= 0) {
+                clearInterval(particleCountdownTimer);
+                createTextParticle(particleOption.endText);
+                canvas.style.display = 'none';
+                endCountdown();
+                return;
+            }
+            
+            particleCount--;
+            if (particleCount === 0) {
+                clearInterval(particleCountdownTimer);
+                createTextParticle(particleOption.endText);
+                canvas.style.display = 'none';
+                endCountdown();
+                return;
+            }
+            createTextParticle(particleCount.toString());
+        }
+
+        // 窗口自适应
+        window.addEventListener('resize', () => {
+            cw = canvas.width = window.innerWidth;
+            ch = canvas.height = window.innerHeight;
+            if (canvas.style.display === 'block') {
+                createTextParticle(particleCount.toString());
+            }
+        });
+
+        // 倒计时
+        function updateCountdown() {
+            if (isCountdownEnded) return;
+            
+            const now = new Date().getTime();
+            const distance = targetDate - now;
+            
+            // 如果已超时，直接结束
+            if (distance <= 0) {
+                endCountdown();
+                return;
+            }
+            
+            // 计算天时分秒
+            const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+            
+            // 显示到页面
+            document.getElementById('days').innerText = days.toString().padStart(2, '0');
+            document.getElementById('hours').innerText = hours.toString().padStart(2, '0');
+            document.getElementById('minutes').innerText = minutes.toString().padStart(2, '0');
+            document.getElementById('seconds').innerText = seconds.toString().padStart(2, '0');
+            
+            // 当距离跨年还有4秒时，启动粒子倒计时
+            if (distance <= 4000 && distance > 0) {
+                startParticleCountdown(distance);
+            }
+        }
+        
+        // 启动粒子倒计时
+        function startParticleCountdown(remainingTime) {
+            // 清除常规倒计时
+            clearInterval(countdownInterval);
+            
+            // 隐藏常规倒计时元素
+            document.querySelector('.countdown-box').style.display = 'none';
+            document.querySelector('.subtitle').style.display = 'none';
+            
+            // 显示粒子倒计时画布
+            canvas.style.display = 'block';
+            
+            // 初始化粒子倒计时
+            particleCount = Math.floor(remainingTime / 1000);
+            createTextParticle(particleCount.toString());
+            renderParticle();
+            
+            // 计算第一个倒计时的等待时间
+            let firstDelay = remainingTime % 1000;
+            
+            // 等待第一个间隔后开始整数倒计时
+            setTimeout(() => {
+                // 每次倒计时前先校验真实时间，避免偏差
+                particleCountdownTimer = setInterval(() => {
+                    const currentDistance = targetDate - new Date().getTime();
+                    if (currentDistance <= 0) {
+                        clearInterval(particleCountdownTimer);
+                        canvas.style.display = 'none';
+                        endCountdown();
+                        return;
+                    }
+                    particleCountDown();
+                }, 1000);
+            }, firstDelay);
+        }
+        
+        // 倒计时结束处理
+        function endCountdown() {
+            if (isCountdownEnded) return;
+            
+            isCountdownEnded = true;
+            clearInterval(countdownInterval);
+            clearInterval(particleCountdownTimer);
+            
+            // 隐藏所有倒计时相关元素
+            document.querySelector('.subtitle').style.display = 'none';
+            document.querySelector('.countdown-box').style.display = 'none';
+            
+            // 显示祝福语并添加动画
+            const blessingEl = document.getElementById('blessingText');
+            blessingEl.style.display = 'block';
+            animateBlessingText(blessingEl);
+            
+            // 启动烟花效果
+            firework.start();
+        }
+        
+        // 烟花效果实现
+        class Firework {
+            constructor() {
+                this.canvas = document.getElementById('fireworks');
+                this.ctx = this.canvas.getContext('2d');
+                this.resizeCanvas();
+                window.addEventListener('resize', () => this.resizeCanvas());
+                
+                this.fireworks = [];
+                this.particles = [];
+                this.gravity = 0.05;
+                this.colors = ['#ff5252', '#ff4081', '#e040fb', '#7c4dff', '#536dfe', '#448aff', '#40c4ff', '#18ffff', '#64ffda', '#69f0ae', '#b2ff59', '#ffff8d'];
+            }
+            
+            resizeCanvas() {
+                this.canvas.width = window.innerWidth;
+                this.canvas.height = window.innerHeight;
+            }
+            
+            createFirework(x, y) {
+                const color = this.colors[Math.floor(Math.random() * this.colors.length)];
+                const particleCount = 100 + Math.floor(Math.random() * 50);
+                
+                for (let i = 0; i < particleCount; i++) {
+                    const angle = Math.random() * Math.PI * 2;
+                    const speed = 2 + Math.random() * 3;
+                    
+                    this.particles.push({
+                        x: x,
+                        y: y,
+                        sx: Math.cos(angle) * speed,
+                        sy: Math.sin(angle) * speed,
+                        color: color,
+                        alpha: 1,
+                        decay: 0.005 + Math.random() * 0.005,
+                        size: 2 + Math.random() * 2
+                    });
+                }
+            }
+            
+            updateParticles() {
+                for (let i = this.particles.length - 1; i >= 0; i--) {
+                    const p = this.particles[i];
+                    p.sy += this.gravity;
+                    p.x += p.sx;
+                    p.y += p.sy;
+                    p.sx *= 0.98;
+                    p.sy *= 0.98;
+                    p.alpha -= p.decay;
+                    
+                    if (p.alpha <= 0) {
+                        this.particles.splice(i, 1);
+                    }
+                }
+            }
+            
+            drawParticles() {
+                this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+                
+                this.particles.forEach(p => {
+                    this.ctx.beginPath();
+                    this.ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+                    this.ctx.fillStyle = `${p.color}${Math.floor(p.alpha * 255).toString(16).padStart(2, '0')}`;
+                    this.ctx.fill();
+                });
+            }
+            
+            launchRandomFireworks() {
+                const x = Math.random() * this.canvas.width;
+                const y = Math.random() * this.canvas.height * 0.6;
+                this.createFirework(x, y);
+            }
+            
+            animate() {
+                this.updateParticles();
+                this.drawParticles();
+                requestAnimationFrame(() => this.animate());
+            }
+            
+            start() {
+                this.animate();
+                const fireworkInterval = setInterval(() => {
+                    this.launchRandomFireworks();
+                }, 300);
+                
+                setTimeout(() => {
+                    clearInterval(fireworkInterval);
+                }, 10000);
+            }
+        }
+
+        // 初始化烟花
+        const firework = new Firework();
+
+        // 祝福语渐入动画
+        function animateBlessingText(element) {
+            let opacity = 0;
+            element.style.opacity = opacity;
+            
+            const fadeInterval = setInterval(() => {
+                opacity += 0.05; // 更慢的渐入速度，更柔和
+                element.style.opacity = opacity;
+                
+                if (opacity >= 1) {
+                    clearInterval(fadeInterval);
+                }
+            }, 30); // 更短的间隔，更平滑
+        }
+        
+        // 初始化逻辑：先判断是否已超时
+        const now = new Date().getTime();
+        if (now >= targetDate) {
+            // 超时：直接隐藏倒计时元素，显示祝福语
+            document.querySelector('.subtitle').style.display = 'none';
+            document.querySelector('.countdown-box').style.display = 'none';
+            endCountdown();
+        } else {
+            // 未超时：正常初始化倒计时
+            updateCountdown();
+            countdownInterval = setInterval(updateCountdown, 1000);
+        }
+    </script>
+</body>
+</html>
